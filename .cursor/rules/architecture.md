@@ -2,41 +2,39 @@
 
 ## 기술 스택
 
-- **Frontend**: React 18, React Router, Tailwind CSS, react-markdown + remark-gfm, rehype-highlight
+- **Frontend**: React 18, Vite, React Router, Tailwind CSS, react-markdown + remark-gfm, rehype-highlight
 - **Backend**: Node.js, Express, JWT (jsonwebtoken)
 - **Database**: PostgreSQL
 - **ORM**: Prisma 또는 Knex.js
 - **이미지 (MVP)**: Multer + 로컬 스토리지
-- **환경**: Docker Desktop (docker-compose)
+- **환경**: 웹은 로컬(npm run dev) 또는 Docker. docker-compose up 시 web(8080) + server(3000) + db(5432) 모두 실행.
 
 ## 구조
 
 ```
-Client (React SPA)
-  ↕ REST API (JSON)
-Server (Express)
+Web (React SPA) — 로컬 실행, 컨테이너 없음
+  ↕ REST API (JSON) — /api 프록시 → localhost:3000
+Server (Express) — Docker 또는 로컬
   ↕
-PostgreSQL
+PostgreSQL — Docker
 ```
 
-## 프로젝트 구조 (예시)
+## 프로젝트 구조
 
 ```
-client/                 # React 프론트엔드
-├── src/
-│   ├── components/     # Layout, Header, Footer, 카드, 뱃지, 에디터 등
-│   ├── pages/          # 홈, explore, category, article, admin
-│   ├── hooks/
-│   ├── api/            # API 클라이언트
-│   └── styles/
-server/                 # Express 백엔드
-├── src/
-│   ├── routes/         # articles, categories, tags, comments, admin
-│   ├── middleware/     # auth, error
-│   ├── services/
-│   └── db/             # Prisma/Knex
-├── uploads/            # 이미지 (MVP 로컬)
-docker-compose.yml
+/web                  # React (Vite). Docker 없음, 로컬에서 npm run dev
+  package.json
+  vite.config.ts
+  src/
+server/               # Express (TS). Dockerfile 있음
+  package.json
+  src/index.ts
+  Dockerfile
+  uploads/
+docker-compose.yml    # web(8080) + server(3000) + db(5432). PsychPaper는 http://localhost:8080
+.env
+.env.example
+.gitignore
 ```
 
 ## 라우팅 (React)

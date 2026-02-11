@@ -11,6 +11,7 @@ dist/
 build/
 .next/
 out/
+web/dist/
 
 # Logs & debug
 npm-debug.log*

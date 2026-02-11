@@ -28,20 +28,21 @@
 
 **디자인 시각 레퍼런스:** `docs/design-reference.html` — 브라우저로 열어 Hero, 카드, PARS, 테이블 등 전체 UI 확인용.
 
-## 자주 쓰는 명령어 (예상)
+## 자주 쓰는 명령어
 
 ```bash
-# 프론트엔드
-cd client && npm run dev
+# 웹 (로컬만, 컨테이너 없음)
+cd web && npm install && npm run dev
 
-# 백엔드
-cd server && npm run dev
+# 서버 (로컬)
+cd server && npm install && npm run dev
 
-# DB 마이그레이션 (Prisma 예시)
+# 전체 (웹 + 서버 + DB) Docker로 한 번에
+docker-compose up --build
+# → 브라우저에서 http://localhost:8080 으로 PsychPaper 접속
+
+# DB 마이그레이션 (Prisma 도입 후)
 cd server && npx prisma migrate dev
-
-# 전체 (docker-compose)
-docker-compose up
 ```
 
 ## 기본 규칙 (작업 시)

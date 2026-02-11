@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --text: #e8e6e3;
+  --dim: #6b6b7b;
+  --border: rgba(255, 255, 255, 0.06);
+  --accent: #ff3d3d;
+  --blue: #4a9eff;
+  --green: #22c55e;
+  --yellow: #facc15;
+  --purple: #a78bfa;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}

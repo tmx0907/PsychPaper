@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>잠이 부족해도, 너무 많이 자도 죽는다 — 130만 명 메타분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --text: #e8e6e3;
+  --dim: #6b6b7b;
+  --accent: #ff3d3d;
+  --accent2: #ff6b35;
+  --blue: #4a9eff;
+  --green: #22c55e;
+  --yellow: #facc15;
+  --purple: #a78bfa;
+  --cyan: #22d3ee;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -15%;
+  right: -15%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(255,61,61,0.06) 0%, rgba(167,139,250,0.04) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 8s ease-in-out infinite;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(74,158,255,0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 8s 3s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.hero-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-tag::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-weight: 900;
+  font-size: clamp(2rem, 6.5vw, 4.2rem);
+  line-height: 1.15;
+  max-width: 820px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero h1 .red { color: var(--accent); }
+.hero h1 .blue { color: var(--blue); }
+.hero h1 .dim { color: var(--dim); font-weight: 700; }
+
+.hero-sub {
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  color: var(--dim);
+  max-width: 580px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.hero-stat-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.hero-stat-num.red { color: var(--accent); }
+.hero-stat-num.blue { color: var(--blue); }
+.hero-stat-num.purple { color: var(--purple); }
+.hero-stat-num.green { color: var(--green); }
+.hero-stat-label {
+  font-size: 0.75rem;
+  color: var(--dim);
+  margin-top: 0.25rem;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  animation: bob 2s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── CONTENT ─── */
+.content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+.section {
+  margin-bottom: 5rem;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-weight: 900;
+  font-size: 1.8rem;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  color: var(--text);
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+}
+p .hl { color: var(--accent); font-weight: 700; }
+p .hl-blue { color: var(--blue); font-weight: 700; }
+p .hl-green { color: var(--green); font-weight: 700; }
+p .hl-purple { color: var(--purple); font-weight: 700; }
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+.callout.blue { border-left-color: var(--blue); }
+.callout.green { border-left-color: var(--green); }
+.callout.yellow { border-left-color: var(--yellow); }
+.callout.purple { border-left-color: var(--purple); }
+.callout-emoji { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.callout p { margin-bottom: 0; }
+.callout .source {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-top: 0.75rem;
+  display: block;
+}
+
+/* ─── U-SHAPE CHART ─── */
+.u-chart {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  margin: 2.5rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.u-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,61,61,0.3), rgba(74,158,255,0.3), transparent);
+}
+.u-chart-title {
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.u-chart-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-bottom: 2rem;
+}
+.u-visual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  height: 180px;
+  margin-bottom: 1rem;
+}
+.u-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  max-width: 70px;
+}
+.u-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.u-bar-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.u-bar-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.u-safe-zone {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  padding: 4px 8px;
+  background: rgba(34,197,94,0.1);
+  border: 1px dashed rgba(34,197,94,0.3);
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+/* ─── RISK CARDS ─── */
+.risk-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 2.5rem 0;
+}
+.risk-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+.risk-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.risk-card.danger::before {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.risk-card.warning::before {
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+}
+.risk-card .emoji { font-size: 2rem; margin-bottom: 0.75rem; }
+.risk-card .risk-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+.risk-card .risk-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.risk-card .risk-num.red {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.risk-card .risk-num.purple {
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.risk-card .risk-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  margin-top: 0.75rem;
+}
+.risk-card .risk-ci {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #3a3a4a;
+  margin-top: 0.5rem;
+}
+
+/* ─── SCALE ─── */
+.sleep-scale {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+}
+.scale-title {
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.scale-track {
+  height: 48px;
+  border-radius: 24px;
+  background: linear-gradient(90deg,
+    var(--accent) 0%,
+    var(--accent2) 15%,
+    var(--yellow) 25%,
+    var(--green) 38%,
+    var(--green) 55%,
+    var(--yellow) 65%,
+    var(--purple) 78%,
+    var(--blue) 100%
+  );
+  position: relative;
+  margin-bottom: 1rem;
+  opacity: 0.85;
+}
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  padding: 0 0.5rem;
+}
+.scale-zone {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.scale-zone .safe {
+  display: inline-block;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.25);
+  color: var(--green);
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ─── SUBGROUP BARS ─── */
+.chart-container {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+}
+.chart-title {
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.chart-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-bottom: 1.5rem;
+}
+.bar-group { margin-bottom: 1.1rem; }
+.bar-label {
+  font-size: 0.85rem;
+  color: var(--dim);
+  margin-bottom: 0.35rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.bar-label span:last-child {
+  font-family: 'Space Mono', monospace;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.bar-track {
+  height: 24px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bar-fill.red { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.bar-fill.blue { background: linear-gradient(90deg, #2563eb, var(--blue)); }
+.bar-fill.purple { background: linear-gradient(90deg, #7c3aed, var(--purple)); }
+.bar-fill.green { background: linear-gradient(90deg, #059669, var(--green)); }
+.bar-fill.yellow { background: linear-gradient(90deg, #d97706, var(--yellow)); }
+.bar-fill.cyan { background: linear-gradient(90deg, #0891b2, var(--cyan)); }
+
+/* ─── BIG NUMBER ─── */
+.big-num {
+  text-align: center;
+  margin: 3.5rem 0;
+}
+.big-num .number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4rem, 14vw, 9rem);
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.big-num .unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--dim);
+  margin-top: 0.5rem;
+}
+
+/* ─── COMPARISON ─── */
+.vs-card {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  text-align: center;
+}
+.vs-card .label {
+  font-size: 0.7rem;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-family: 'Space Mono', monospace;
+}
+.vs-card .value {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.vs-card .vs {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--dim);
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vs-card .desc {
+  font-size: 0.8rem;
+  color: var(--dim);
+  margin-top: 0.4rem;
+}
+
+/* ─── BOTTOM LINE ─── */
+.bottom-line {
+  background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(74,158,255,0.06));
+  border: 1px solid rgba(34,197,94,0.12);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 3rem 0;
+  text-align: center;
+}
+.bottom-line h3 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+.bottom-line p {
+  color: var(--dim);
+  max-width: 520px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+}
+
+/* ─── REFS ─── */
+.divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin: 3rem 0;
+}
+.refs {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.refs h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 1rem;
+}
+.refs li {
+  font-size: 0.75rem;
+  color: #4a4a5a;
+  margin-bottom: 0.4rem;
+  list-style: none;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+.refs li::before { content: '→ '; color: var(--accent); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hero-stats { flex-direction: column; gap: 1.5rem; }
+  .risk-row { grid-template-columns: 1fr; }
+  .vs-card { grid-template-columns: 1fr; gap: 0.5rem; }
+  .vs-card .vs { margin: 0 auto; }
+  .u-visual { height: 140px; gap: 4px; }
+  .u-bar-wrap { max-width: 50px; }
+}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div style="max-width:820px; margin:0 auto; width:100%;">
+    <div class="hero-tag">Meta-Analysis Deep Dive · Sleep & Mortality</div>
+    <h1>
+      잠이 부족해도 죽고,<br>
+      <span class="red">너무 많이 자도 죽는다</span><br>
+      <span class="dim">— 130만 명이 증명한 U자 곡선</span>
+    </h1>
+    <p class="hero-sub">
+      어제 3시간 자고 수업 들으면서 "이게 정상인가?" 싶어서
+      논문을 뒤져봤습니다. 16개 전향적 연구, 130만 명, 11만 명의 사망 데이터. 
+      결과가 꽤 살벌합니다. 💀
+    </p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num red">1,382,999</div>
+        <div class="hero-stat-label">총 참가자 수</div>
+      </div>
+      <div>
+        <div class="hero-stat-num blue">112,566</div>
+        <div class="hero-stat-label">추적 기간 내 사망자</div>
+      </div>
+      <div>
+        <div class="hero-stat-num purple">16</div>
+        <div class="hero-stat-label">포함된 전향적 연구</div>
+      </div>
+      <div>
+        <div class="hero-stat-num green">4~25년</div>
+        <div class="hero-stat-label">추적 관찰 기간</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ SCROLL</div>
+</header>
+
+<!-- ═══ CONTENT ═══ -->
+<main class="content">
+
+  <!-- ═══ 01 ═══ -->
+  <section class="section">
+    <div class="section-num">01 — 이 논문이 뭔데</div>
+    <h2>130만 명을 최대 25년간 추적했다</h2>
+    <p>
+      Cappuccio 등(2010)이 <em>Sleep</em> 저널에 발표한 이 논문은 
+      <span class="hl-blue">MEDLINE, EMBASE, Cochrane Library</span>를 뒤져서 
+      1966년부터 2009년까지의 모든 전향적 연구를 모았습니다.
+    </p>
+    <p>
+      기준이 까다로웠어요. 전향적 코호트 디자인이어야 하고, 
+      추적 기간이 3년 이상이어야 하고, 
+      수면 시간을 기준 시점에 측정했어야 하고, 
+      사망을 전향적으로 기록해야 했습니다.
+    </p>
+    <p>
+      결과적으로 <span class="hl">8개국, 16개 연구, 27개 독립 코호트</span>가 선정됐습니다. 
+      미국 4개, 일본 4개, 영국 3개, 스페인·스웨덴·핀란드·이스라엘·대만 각 1개. 
+      참가자 총 <span class="hl">138만 명</span>, 추적 기간 중 사망자 <span class="hl-blue">11만 2,566명</span>.
+    </p>
+    <div class="callout blue">
+      <div class="callout-emoji">🔬</div>
+      <p>
+        <strong>왜 이 논문이 중요한가:</strong>
+        개별 연구들은 "적게 자면 나쁘다" "많이 자면 나쁘다"를 
+        각각 보여줬지만, 결론이 들쑥날쑥했습니다.
+        이 메타분석은 전체를 하나로 합쳐서 
+        <strong>통계적 파워를 극대화</strong>하고 
+        출판 편향까지 검증한 논문입니다.
+      </p>
+      <span class="source">Cappuccio et al., Sleep, 2010;33(5):585-592</span>
+    </div>
+  </section>
+
+  <!-- ═══ 02 ═══ -->
+  <section class="section">
+    <div class="section-num">02 — 핵심 결과</div>
+    <h2>적게 자면 +12%, 많이 자면 +30% 사망 위험</h2>
+    <p>
+      결과는 명확했습니다. 
+      7~8시간 자는 사람 대비, 
+      <span class="hl">짧게 자는 사람</span>(대체로 5~6시간 이하)은 사망 위험이 12% 높았고,
+      <span class="hl-purple">길게 자는 사람</span>(대체로 9시간 이상)은 30% 높았습니다.
+    </p>
+
+    <div class="risk-row">
+      <div class="risk-card danger">
+        <div class="emoji">⚡</div>
+        <div class="risk-label">수면 부족 그룹</div>
+        <div class="risk-num red">+12%</div>
+        <div class="risk-desc">사망 위험 증가<br>(5~6시간 이하)</div>
+        <div class="risk-ci">RR 1.12 [95% CI: 1.06–1.18]<br>P &lt; 0.01</div>
+      </div>
+      <div class="risk-card warning">
+        <div class="emoji">😴</div>
+        <div class="risk-label">과다 수면 그룹</div>
+        <div class="risk-num purple">+30%</div>
+        <div class="risk-desc">사망 위험 증가<br>(9시간 이상)</div>
+        <div class="risk-ci">RR 1.30 [95% CI: 1.22–1.38]<br>P &lt; 0.0001</div>
+      </div>
+    </div>
+
+    <p>
+      둘 다 <span class="hl-blue">출판 편향이 없었고</span>(Egger's test: P=0.74, P=0.18), 
+      130만 명이라는 압도적 표본 크기로 통계적 검증력도 확보됐습니다. 
+      즉, 이건 우연이 아닙니다.
+    </p>
+  </section>
+
+  <!-- ═══ 03 ═══ -->
+  <section class="section">
+    <div class="section-num">03 — U자 곡선</div>
+    <h2>수면과 사망의 관계는 U자 형태다</h2>
+    <p>
+      양 극단이 모두 위험합니다. 
+      이걸 <span class="hl-blue">U-shaped association</span>이라고 부르는데, 
+      가운데(7~8시간)가 가장 안전하고, 양쪽 끝으로 갈수록 위험이 올라갑니다.
+    </p>
+
+    <div class="u-chart">
+      <div class="u-chart-title">수면 시간별 사망 위험도 (RR)</div>
+      <div class="u-chart-sub">기준 = 7~8시간 수면 (RR 1.0)</div>
+      <div class="u-visual">
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--accent);">↑↑</div>
+          <div class="u-bar" style="height: 0; background: linear-gradient(to top, var(--accent), var(--accent2));" data-height="140px"></div>
+          <div class="u-bar-label">≤4h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--accent);">↑</div>
+          <div class="u-bar" style="height: 0; background: linear-gradient(to top, var(--accent2), var(--yellow));" data-height="95px"></div>
+          <div class="u-bar-label">5h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--yellow);">↗</div>
+          <div class="u-bar" style="height: 0; background: linear-gradient(to top, var(--yellow), var(--green));" data-height="55px"></div>
+          <div class="u-bar-label">6h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--green);">✓</div>
+          <div class="u-bar" style="height: 0; background: var(--green);" data-height="20px"></div>
+          <div class="u-bar-label">7h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--green);">✓</div>
+          <div class="u-bar" style="height: 0; background: var(--green);" data-height="20px"></div>
+          <div class="u-bar-label">8h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--purple);">↗</div>
+          <div class="u-bar" style="height: 0; background: linear-gradient(to top, var(--blue), var(--purple));" data-height="80px"></div>
+          <div class="u-bar-label">9h</div>
+        </div>
+        <div class="u-bar-wrap">
+          <div class="u-bar-value" style="color: var(--purple);">↑↑</div>
+          <div class="u-bar" style="height: 0; background: linear-gradient(to top, var(--purple), #dc2626);" data-height="160px"></div>
+          <div class="u-bar-label">≥10h</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sleep-scale">
+      <div class="scale-title">수면 위험도 스펙트럼</div>
+      <div class="scale-track"></div>
+      <div class="scale-labels">
+        <span>≤4h 💀</span>
+        <span>5h</span>
+        <span>6h</span>
+        <span style="color: var(--green);">7~8h ✓</span>
+        <span>9h</span>
+        <span>≥10h 💀</span>
+      </div>
+      <div class="scale-zone">
+        <span class="safe">안전 구간: 6~8시간</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 04 ═══ -->
+  <section class="section">
+    <div class="section-num">04 — 누구에게나 적용되나</div>
+    <h2>성별, 나이, 국적 상관없이 일관된 결과</h2>
+    <p>
+      이 논문이 강력한 이유는 <span class="hl-blue">하위그룹 분석</span>을 철저히 했기 때문입니다. 
+      "혹시 특정 그룹에서만 그런 거 아냐?" 하는 의문을 하나하나 검증했어요.
+    </p>
+
+    <div class="chart-container">
+      <div class="chart-title">수면 부족 → 사망 위험: 하위그룹별 분석</div>
+      <div class="chart-subtitle">모든 그룹에서 유의미한 위험 증가 (RR &gt; 1.0)</div>
+
+      <div class="bar-group">
+        <div class="bar-label"><span>👨 남성</span><span>+12%</span></div>
+        <div class="bar-track"><div class="bar-fill red" data-width="55%"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>👩 여성</span><span>+12%</span></div>
+        <div class="bar-track"><div class="bar-fill red" data-width="55%"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>🧑 60세 미만</span><span>+12%</span></div>
+        <div class="bar-track"><div class="bar-fill blue" data-width="55%"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>👴 60세 이상</span><span>+13%</span></div>
+        <div class="bar-track"><div class="bar-fill blue" data-width="58%"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>🌏 동아시아 (일본, 대만)</span><span>+15%</span></div>
+        <div class="bar-track"><div class="bar-fill purple" data-width="65%"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>🌍 유럽 & 미국</span><span>+10%</span></div>
+        <div class="bar-track"><div class="bar-fill cyan" data-width="48%"></div></div>
+      </div>
+    </div>
+
+    <p>
+      <span class="hl">수면 부족의 위험은 보편적</span>이었습니다.
+      성별, 연령, 사회경제적 지위, 수면 부족의 정의(5시간 이하 vs 6시간 이하), 
+      추적 기간, 지역 어느 것도 결과를 바꾸지 못했어요.
+    </p>
+
+    <div class="callout yellow">
+      <div class="callout-emoji">⚠️</div>
+      <p>
+        반면 <strong>과다 수면</strong>은 그룹에 따라 차이가 있었습니다.
+        고령자에서 더 강했고, 10시간 이상일수록 효과가 컸고, 
+        동아시아에서 특히 강하게 나타났습니다.
+        이건 과다 수면 자체가 <strong>숨겨진 질병의 신호</strong>일 수 있다는 뜻입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 05 ═══ -->
+  <section class="section">
+    <div class="section-num">05 — 규모감을 잡아보자</div>
+    <h2>"12%"가 얼마나 큰 숫자인지</h2>
+    <p>
+      "12% 증가? 별거 아니네?" 싶을 수 있습니다. 
+      하지만 이걸 <span class="hl">인구 규모</span>에 대입하면 얘기가 달라집니다.
+    </p>
+
+    <div class="big-num">
+      <div class="number">630만</div>
+      <div class="unit">영국에서 수면 부족으로 인한 귀속 사망 추정 수 (16세 이상)</div>
+    </div>
+
+    <div class="vs-card">
+      <div class="side">
+        <div class="label">영국 (16세 이상)</div>
+        <div class="value" style="color: var(--accent);">630만</div>
+        <div class="desc">귀속 사망</div>
+      </div>
+      <div class="vs">vs</div>
+      <div class="side">
+        <div class="label">미국 (20세 이상)</div>
+        <div class="value" style="color: var(--blue);">2,500만</div>
+        <div class="desc">귀속 사망</div>
+      </div>
+    </div>
+
+    <p>
+      논문 저자들이 직접 계산한 수치입니다.
+      수면 부족과 사망의 관계가 인과적이라면, 
+      영국에서만 630만 명, 미국에서 2,500만 명의 사망이 
+      수면 부족에 귀속될 수 있다는 겁니다.
+    </p>
+    <p>
+      물론 이건 <span class="hl-blue">"만약 인과관계라면"</span>이라는 전제가 붙습니다. 
+      하지만 규모감을 느끼기엔 충분하죠.
+    </p>
+  </section>
+
+  <!-- ═══ 06 ═══ -->
+  <section class="section">
+    <div class="section-num">06 — 왜 그런 걸까</div>
+    <h2>수면 부족이 몸을 망가뜨리는 메커니즘</h2>
+    <p>
+      논문은 수면 부족이 왜 사망률을 높이는지 
+      여러 생물학적 경로를 제시합니다.
+    </p>
+
+    <div class="callout green">
+      <div class="callout-emoji">🧬</div>
+      <p>
+        <strong>짧은 수면이 트리거하는 것들:</strong><br><br>
+        → <strong>렙틴↓ 그렐린↑</strong> — 식욕 폭증, 칼로리 과잉 섭취, 에너지 소비 감소<br>
+        → <strong>비만 + 혈당 조절 장애</strong> — 인슐린 저항성 증가<br>
+        → <strong>코르티솔↑</strong> — 스트레스 호르몬 분비 증가<br>
+        → <strong>성장호르몬 대사 변화</strong><br>
+        → <strong>저등급 염증(Low-grade inflammation)</strong> — 심혈관 질환 + 암 위험↑<br>
+        → <strong>면역 기능 저하</strong>
+      </p>
+    </div>
+
+    <p>
+      반면 <span class="hl-purple">과다 수면</span>(9시간 이상)의 경우, 
+      그 자체가 직접적으로 해롭다는 증거는 아직 없습니다.
+      저자들은 과다 수면이 <span class="hl">숨겨진 질병의 마커</span>일 가능성이 높다고 봤습니다.
+    </p>
+    <p>
+      우울증, 낮은 사회경제적 지위, 실업, 운동 부족, 
+      미진단된 건강 문제, 전반적인 건강 악화, 
+      암 관련 피로 등이 과다 수면과 연관되어 있고, 
+      이것들이 사망률과의 관계를 교란할 수 있다는 거죠.
+    </p>
+
+    <div class="callout purple">
+      <div class="callout-emoji">🩺</div>
+      <p>
+        <strong>논문의 제안:</strong>
+        매일 9시간 이상 자는 사람은 
+        건강 문제가 숨어 있을 수 있으므로 
+        <strong>진단적 도구</strong>로 활용할 수 있다.
+        즉, "많이 자는 것"이 병의 원인이 아니라 
+        <strong>병이 있다는 신호</strong>일 수 있다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 07 ═══ -->
+  <section class="section">
+    <div class="section-num">07 — 수면 변화도 위험하다</div>
+    <h2>수면 시간이 "변한" 사람도 위험하다</h2>
+    <p>
+      흥미로운 추가 발견이 있습니다.
+      세 개의 연구가 <span class="hl-blue">시간 경과에 따른 수면 변화</span>를 추적했는데요.
+    </p>
+
+    <div class="vs-card">
+      <div class="side">
+        <div class="label">수면 시간을 줄인 사람</div>
+        <div class="value" style="color: var(--accent);">+62%</div>
+        <div class="desc">사망 위험 증가<br>주로 심혈관 사망</div>
+      </div>
+      <div class="vs">⚠</div>
+      <div class="side">
+        <div class="label">수면 시간을 늘린 사람</div>
+        <div class="value" style="color: var(--purple);">+75%</div>
+        <div class="desc">사망 위험 증가<br>주로 비심혈관 사망</div>
+      </div>
+    </div>
+
+    <p>
+      Whitehall II 연구에서 5년 간격으로 수면 시간을 측정한 결과, 
+      <span class="hl">수면 시간이 줄어든 사람</span>은 심혈관 사망 위험이 2배(+104%), 
+      <span class="hl-purple">수면 시간이 늘어난 사람</span>은 비심혈관 사망 위험이 2배(+106%) 증가했습니다.
+    </p>
+    <p>
+      즉, 원래 잘 자던 사람이 갑자기 덜 자거나 더 자기 시작하면 
+      그 <span class="hl-blue">"변화" 자체가 위험 신호</span>라는 겁니다.
+    </p>
+  </section>
+
+  <!-- ═══ 08 ═══ -->
+  <section class="section">
+    <div class="section-num">08 — 한계와 맥락</div>
+    <h2>이 논문도 완벽하진 않다</h2>
+    <p>
+      공정하게 한계도 짚어야 합니다.
+    </p>
+    <p>
+      모든 연구가 <span class="hl-blue">설문지로 수면 시간을 측정</span>했습니다.
+      "몇 시간 주무세요?"라는 자기보고식이라 
+      실제 수면 시간과 차이가 있을 수 있어요.
+      침대에 누워있는 시간 ≠ 실제 잔 시간이니까요.
+    </p>
+    <p>
+      또한 수면 시간을 <span class="hl">한 시점에서만 측정</span>했습니다.
+      사람의 수면 패턴은 시간이 지나면서 바뀔 수 있는데, 
+      대부분의 연구가 이걸 반영하지 못했습니다.
+    </p>
+    <p>
+      마지막으로, <span class="hl-purple">관찰 연구의 한계</span>가 있습니다.
+      메타분석이라 해도 전향적 관찰 연구를 합친 것이라 
+      교란 변수를 완벽히 통제할 수 없습니다.
+      "수면 부족 → 사망"이 아니라 
+      "다른 원인 → 수면 부족 + 사망"일 가능성도 있어요.
+    </p>
+    <div class="callout">
+      <div class="callout-emoji">⚖️</div>
+      <p>
+        그럼에도: 130만 명, 8개국, 최대 25년 추적, 
+        출판 편향 없음, 다양한 교란 변수 보정 — 
+        <strong>현재까지 가장 강력한 수준의 관찰적 근거</strong>입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 09 ═══ -->
+  <section class="section">
+    <div class="section-num">09 — 그래서 어떻게 자야 하나</div>
+    <h2>논문이 말하는 최적 수면</h2>
+
+    <div class="bottom-line">
+      <h3>
+        매일 <span style="color: var(--green);">6~8시간</span> 자는 성인에게<br>
+        장기적 건강 위해의 근거는 없다
+      </h3>
+      <p>
+        이 범위를 벗어나면 양쪽 모두에서 위험이 증가합니다.
+        5시간 이하 수면자는 고위험 그룹으로 간주해야 하며,
+        9시간 이상 수면자는 미진단 질환 가능성을 고려해야 합니다.
+      </p>
+    </div>
+
+    <p>
+      논문의 결론은 이렇습니다.
+    </p>
+    <p>
+      <span class="hl-green">✓ 매일 5시간 이하</span>로 자는 사람 → 전인구 사망의 고위험군<br>
+      <span class="hl-green">✓ 6~8시간</span> → 현재까지 해로운 근거 없음, 최적으로 추정<br>
+      <span class="hl-green">✓ 9시간 이상</span> → 숨겨진 질병 탐지를 위한 진단 도구로 활용 가능
+    </p>
+    <p>
+      <span class="hl">수면 시간은 추가적인 행동적 위험 요인</span>으로 간주해야 하며, 
+      환경에 의해 크게 결정되지만 
+      교육, 상담, 그리고 공중보건 차원의 환경 개선을 통해 
+      수정 가능한 요인이라고 저자들은 강조합니다.
+    </p>
+
+    <div class="callout green">
+      <div class="callout-emoji">💤</div>
+      <p>
+        <strong>3시간 자고 수업 들은 내가 가져가야 할 교훈:</strong><br><br>
+        이건 "좀 피곤한 거"가 아닙니다.
+        130만 명의 데이터가 말합니다 — 
+        수면은 선택이 아니라 <strong>생존 변수</strong>입니다.
+        오늘 밤은 제발 7시간 자세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- REFS -->
+  <div class="divider"></div>
+  <section class="refs">
+    <h4>References</h4>
+    <ul>
+      <li>Cappuccio FP, D'Elia L, Strazzullo P, Miller MA. Sleep Duration and All-Cause Mortality: A Systematic Review and Meta-Analysis of Prospective Studies. <em>Sleep</em>. 2010;33(5):585-592.</li>
+      <li>포함된 16개 연구: Tsubono(1993), Ruigomez(1995), Gale(1998), Kojima(2000), Heslop(2002), Kripke(2002), Mallon(2002), Burazeri(2003), Amagai(2004), Patel(2004), Ferrie(2007), Hublin(2007), Lan(2007), Gangwisch(2008), Ikehara(2009), Stone(2009)</li>
+      <li>Whitehall II Study: Ferrie JE et al. A Prospective Study of Change in Sleep Duration. <em>Sleep</em>. 2007;30(12):1659-1666.</li>
+      <li>Finnish Twin Cohort: Hublin C et al. Sleep and Mortality: A Population-based 22-Year Follow-Up Study. <em>Sleep</em>. 2007;30(10):1245-1253.</li>
+    </ul>
+  </section>
+
+</main>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate horizontal bars
+      entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 300);
+      });
+      // Animate U-chart bars
+      entry.target.querySelectorAll('.u-bar').forEach(bar => {
+        setTimeout(() => { bar.style.height = bar.dataset.height; }, 400);
+      });
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
