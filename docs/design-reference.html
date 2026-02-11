@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD: PsychPaper — 디자인 레퍼런스</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--text:#e8e6e3;--dim:#6b6b7b;--border:rgba(255,255,255,0.06);--accent:#ff3d3d;--accent2:#ff6b35;--blue:#4a9eff;--green:#22c55e;--yellow:#facc15;--purple:#a78bfa;--cyan:#22d3ee}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.noise{position:fixed;inset:0;opacity:.03;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding:3rem 2rem;position:relative;overflow:hidden;max-width:900px;margin:0 auto}
+.hero::before{content:'';position:absolute;top:-20%;right:-15%;width:600px;height:600px;background:radial-gradient(circle,rgba(74,158,255,.08) 0%,rgba(167,139,250,.04) 50%,transparent 70%);border-radius:50%;animation:pulse 8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.15);opacity:1}}
+.hero-tag{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;animation:fadeUp .8s ease both}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--blue)}
+.hero h1{font-weight:900;font-size:clamp(2rem,5.5vw,3.5rem);line-height:1.2;animation:fadeUp .8s .1s ease both}
+.hero h1 .blue{color:var(--blue)}.hero h1 .dim{color:var(--dim);font-weight:700;font-size:.6em}
+.hero-sub{margin-top:1.2rem;font-size:1rem;color:var(--dim);max-width:620px;animation:fadeUp .8s .2s ease both}
+.hero-meta{display:flex;gap:2rem;flex-wrap:wrap;margin-top:2rem;animation:fadeUp .8s .3s ease both}
+.hero-meta-item{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--dim)}
+.hero-meta-item span{color:var(--text);font-weight:700}
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+.toc{max-width:900px;margin:0 auto;padding:0 2rem 3rem}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
+.toc-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;cursor:pointer;transition:all .3s;text-decoration:none;color:var(--text);display:block}
+.toc-item:hover{border-color:rgba(74,158,255,.25);transform:translateY(-2px);background:var(--surface2)}
+.toc-num{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--blue);letter-spacing:.15em;margin-bottom:.3rem}
+.toc-title{font-size:.88rem;font-weight:700;line-height:1.4}
+.content{max-width:900px;margin:0 auto;padding:0 2rem 6rem}
+.section{margin-bottom:4rem;opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-num{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem}
+h2{font-weight:900;font-size:1.6rem;line-height:1.3;margin-bottom:1.2rem}
+h3{font-weight:900;font-size:1.1rem;margin-bottom:.8rem;margin-top:1.8rem}
+p{margin-bottom:1rem;font-size:.95rem}
+.hl{color:var(--accent);font-weight:700}.bl{color:var(--blue);font-weight:700}.gr{color:var(--green);font-weight:700}.pu{color:var(--purple);font-weight:700}
+.callout{background:var(--surface);border-left:3px solid var(--blue);padding:1.2rem 1.5rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-size:.9rem}
+.callout.red{border-left-color:var(--accent)}.callout.green{border-left-color:var(--green)}.callout.yellow{border-left-color:var(--yellow)}.callout.purple{border-left-color:var(--purple)}
+.callout p{margin-bottom:0}
+.tbl-wrap{overflow-x:auto;margin:1.5rem 0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:var(--surface2);color:var(--blue);font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:.65rem .8rem;text-align:left;border-bottom:2px solid rgba(74,158,255,.15)}
+td{padding:.6rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+code{font-family:'Space Mono',monospace;font-size:.82rem;background:var(--surface2);padding:1px 6px;border-radius:3px;color:var(--blue)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin:1.5rem 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.card.c-red::before{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.card.c-blue::before{background:linear-gradient(90deg,#2563eb,var(--blue))}
+.card.c-green::before{background:linear-gradient(90deg,#059669,var(--green))}
+.card.c-purple::before{background:linear-gradient(90deg,#7c3aed,var(--purple))}
+.card.c-yellow::before{background:linear-gradient(90deg,#d97706,var(--yellow))}
+.card.c-cyan::before{background:linear-gradient(90deg,#0891b2,var(--cyan))}
+.card-icon{font-size:1.8rem;margin-bottom:.5rem}
+.card-label{font-family:'Space Mono',monospace;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.card-title{font-weight:900;font-size:.95rem;line-height:1.3;margin-bottom:.4rem}
+.card-desc{font-size:.8rem;color:var(--dim);line-height:1.5}
+.pars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem 0}
+.pars-box{background:var(--surface);border-radius:12px;padding:1.5rem;text-align:center;border:1px solid var(--border);transition:all .3s}
+.pars-box:hover{transform:translateY(-3px)}
+.pars-letter{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1}
+.pars-label{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-top:.5rem}
+.pars-name{font-weight:700;font-size:.9rem;margin-top:.3rem}
+.flow{margin:2rem 0;padding:1.5rem;background:var(--surface);border-radius:12px}
+.flow-step{display:flex;align-items:flex-start;gap:.8rem;margin-bottom:.8rem;font-size:.88rem}
+.flow-step:last-child{margin-bottom:0}
+.flow-arrow{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--dim);min-width:24px;text-align:center;padding-top:.15rem}
+.flow-actor{font-family:'Space Mono',monospace;font-size:.68rem;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.flow-actor.admin{background:rgba(74,158,255,.15);color:var(--blue)}
+.flow-actor.reader{background:rgba(34,197,94,.15);color:var(--green)}
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;margin:1.5rem 0}
+.phase{background:var(--surface);border-radius:12px;padding:1.5rem;border:1px solid var(--border);position:relative;overflow:hidden}
+.phase::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.phase:nth-child(1)::before{background:var(--blue)}.phase:nth-child(2)::before{background:var(--green)}.phase:nth-child(3)::before{background:var(--purple)}.phase:nth-child(4)::before{background:var(--accent)}
+.phase-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1;margin-bottom:.5rem}
+.phase:nth-child(1) .phase-num{color:var(--blue)}.phase:nth-child(2) .phase-num{color:var(--green)}.phase:nth-child(3) .phase-num{color:var(--purple)}.phase:nth-child(4) .phase-num{color:var(--accent)}
+.phase-title{font-weight:900;font-size:.95rem;margin-bottom:.2rem}
+.phase-dur{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--dim);margin-bottom:.5rem}
+.phase-items{font-size:.8rem;color:var(--dim);line-height:1.7}
+.checklist{margin:1.5rem 0}
+.check-item{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.check-box{width:18px;height:18px;border:2px solid var(--dim);border-radius:4px;flex-shrink:0;margin-top:.2rem}
+.divider{width:60px;height:2px;background:linear-gradient(90deg,var(--blue),transparent);margin:3rem 0}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem;margin:1.5rem 0}
+.stack-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.7rem .8rem;text-align:center}
+.stack-cat{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem}
+.stack-name{font-weight:700;font-size:.85rem}
+.swatch-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.swatch{width:45px;height:45px;border-radius:8px}
+.swatch-label{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--dim);text-align:center;margin-top:.2rem}
+@media(max-width:700px){.pars-grid{grid-template-columns:repeat(2,1fr)}.phase-grid,.card-grid{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<header class="hero">
+  <div class="hero-tag">Product Requirements Document · v1.0</div>
+  <h1><span class="blue">PsychPaper</span><br>심리학 논문 해설 &<br>지식 탐색 플랫폼<br><span class="dim">— PRD</span></h1>
+  <p class="hero-sub">심리학 대학원생이 학술 논문을 읽고, 핵심을 시각적으로 매력적인 글로 해설하여 일반 대중과 공유하는 논문 해설 블로그 + 지식 탐색 플랫폼</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">작성자 <span>심리학과 대학원생</span></div>
+    <div class="hero-meta-item">작성일 <span>2026-02-11</span></div>
+    <div class="hero-meta-item">상태 <span style="color:var(--yellow)">Draft</span></div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item"><div class="toc-num">01</div><div class="toc-title">프로젝트 개요</div></a>
+    <a href="#s2" class="toc-item"><div class="toc-num">02</div><div class="toc-title">대상 사용자</div></a>
+    <a href="#s3" class="toc-item"><div class="toc-num">03</div><div class="toc-title">문제 정의</div></a>
+    <a href="#s4" class="toc-item"><div class="toc-num">04</div><div class="toc-title">PARS 카테고리 체계</div></a>
+    <a href="#s5" class="toc-item"><div class="toc-num">05</div><div class="toc-title">주요 기능 정의</div></a>
+    <a href="#s6" class="toc-item"><div class="toc-num">06</div><div class="toc-title">화면 & 컴포넌트</div></a>
+    <a href="#s7" class="toc-item"><div class="toc-num">07</div><div class="toc-title">데이터 구조</div></a>
+    <a href="#s8" class="toc-item"><div class="toc-num">08</div><div class="toc-title">API 설계</div></a>
+    <a href="#s9" class="toc-item"><div class="toc-num">09</div><div class="toc-title">기술 스택 & 디자인</div></a>
+    <a href="#s10" class="toc-item"><div class="toc-num">10</div><div class="toc-title">개발 로드맵</div></a>
+    <a href="#s11" class="toc-item"><div class="toc-num">11</div><div class="toc-title">완료 기준 & KPI</div></a>
+  </div>
+</nav>
+
+<main class="content">
+
+<section class="section" id="s1">
+  <div class="section-num">01 — 프로젝트 개요</div>
+  <h2>왜 PsychPaper인가</h2>
+  <div class="card-grid">
+    <div class="card c-blue"><div class="card-icon">🔍</div><div class="card-label">차별점 1</div><div class="card-title">PARS 카테고리 탐색</div><div class="card-desc">옵시디언 스타일. 논문을 현상/응용/연구유형/규모별로 카드 탐색</div></div>
+    <div class="card c-red"><div class="card-icon">📊</div><div class="card-label">차별점 2</div><div class="card-title">Deep Dive 포맷</div><div class="card-desc">스크롤 기반 데이터 시각화가 포함된 몰입형 아티클</div></div>
+    <div class="card c-green"><div class="card-icon">🔄</div><div class="card-label">차별점 3</div><div class="card-title">SNS → 웹 유입 루프</div><div class="card-desc">요약 카드 SNS 공유 → 관심 독자 웹 유입 → 바이럴</div></div>
+  </div>
+  <p><span class="bl">① 논문 지식의 대중화</span> — 어려운 논문을 "읽고 싶은" 콘텐츠로 변환<br><span class="gr">② 작성자의 학습 도구</span> — 정리하며 학습 심화<br><span class="pu">③ 커뮤니티 형성</span> — 댓글과 공유를 통한 독자 참여</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s2">
+  <div class="section-num">02 — 대상 사용자</div>
+  <h2>누가 사용하는가</h2>
+  <div class="card-grid" style="grid-template-columns:1fr 1fr">
+    <div class="card c-blue"><div class="card-icon">✍️</div><div class="card-label">1차 사용자</div><div class="card-title">작성자 (Admin, 1인)</div><div class="card-desc">심리학과 대학원생. 글 작성·편집·발행, 카테고리·태그·댓글 관리</div></div>
+    <div class="card c-green"><div class="card-icon">👀</div><div class="card-label">2차 사용자</div><div class="card-title">독자 (Readers, 다수)</div><div class="card-desc">일반인·대학생·대학원생. 글 탐색, 댓글, SNS 공유. 로그인 불필요(MVP)</div></div>
+  </div>
+  <div class="callout"><p><strong>사용 환경:</strong> PC 브라우저 우선 (Deep Dive 시각적 경험) + 모바일 반응형 (SNS 유입 대응 필수)</p></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s3">
+  <div class="section-num">03 — 문제 정의 & 해결</div>
+  <h2>5가지 문제 → 해결 매핑</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>문제</th><th>해결</th><th>핵심 기능</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--accent);font-family:'Space Mono',monospace;font-weight:700">P1</td><td>논문은 읽기 어렵다</td><td>"읽고 싶은 콘텐츠"로 변환</td><td style="color:var(--blue)">Deep Dive 아티클</td></tr>
+      <tr><td style="color:var(--accent);font-family:'Space Mono',monospace;font-weight:700">P2</td><td>탐색이 어렵다</td><td>옵시디언식 PARS 분류</td><td style="color:var(--blue)">카드 기반 카테고리 브라우징</td></tr>
+      <tr><td style="color:var(--accent);font-family:'Space Mono',monospace;font-weight:700">P3</td><td>시각적으로 밋밋</td><td>데이터 시각화 내장</td><td style="color:var(--blue)">차트·애니메이션·인포그래픽</td></tr>
+      <tr><td style="color:var(--accent);font-family:'Space Mono',monospace;font-weight:700">P4</td><td>공유해도 유입 안 됨</td><td>SNS 요약 카드 → 웹 루프</td><td style="color:var(--blue)">OG 메타태그 + 공유 버튼</td></tr>
+      <tr><td style="color:var(--accent);font-family:'Space Mono',monospace;font-weight:700">P5</td><td>학습이 분산</td><td>한 곳에 축적</td><td style="color:var(--blue)">카테고리·태그·검색</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s4">
+  <div class="section-num">04 — PARS 카테고리 체계</div>
+  <h2>논문 분류 프레임워크</h2>
+  <p>독자가 <span class="bl">"어떤 관점에서 찾고 싶은가"</span>에 따라 4개 축으로 분류</p>
+  <div class="pars-grid">
+    <div class="pars-box" style="border-color:rgba(255,61,61,.2)"><div class="pars-letter" style="color:var(--accent)">P</div><div class="pars-label">Phenomenon</div><div class="pars-name">현상</div></div>
+    <div class="pars-box" style="border-color:rgba(74,158,255,.2)"><div class="pars-letter" style="color:var(--blue)">A</div><div class="pars-label">Application</div><div class="pars-name">응용</div></div>
+    <div class="pars-box" style="border-color:rgba(34,197,94,.2)"><div class="pars-letter" style="color:var(--green)">R</div><div class="pars-label">Research Type</div><div class="pars-name">연구 유형</div></div>
+    <div class="pars-box" style="border-color:rgba(167,139,250,.2)"><div class="pars-letter" style="color:var(--purple)">S</div><div class="pars-label">Scale</div><div class="pars-name">규모</div></div>
+  </div>
+
+  <h3>P — 현상 카테고리</h3>
+  <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+    <div class="card c-red"><div class="card-title">🌙 수면 & 각성</div></div>
+    <div class="card c-red"><div class="card-title">💭 정서 & 기분</div></div>
+    <div class="card c-red"><div class="card-title">🧠 인지 & 학습</div></div>
+    <div class="card c-red"><div class="card-title">🤝 관계 & 사회</div></div>
+    <div class="card c-red"><div class="card-title">🔥 스트레스</div></div>
+    <div class="card c-red"><div class="card-title">⚡ 동기 & 행동</div></div>
+    <div class="card c-red"><div class="card-title">🌱 발달 & 노화</div></div>
+    <div class="card c-red"><div class="card-title">🎭 성격 & 개인차</div></div>
+  </div>
+
+  <h3>A — 응용 카테고리</h3>
+  <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+    <div class="card c-blue"><div class="card-title">📚 학습 & 교육</div></div>
+    <div class="card c-blue"><div class="card-title">💼 직장 & 생산성</div></div>
+    <div class="card c-blue"><div class="card-title">❤️ 건강 & 웰빙</div></div>
+    <div class="card c-blue"><div class="card-title">💑 관계 & 소통</div></div>
+    <div class="card c-blue"><div class="card-title">👶 육아 & 발달</div></div>
+    <div class="card c-blue"><div class="card-title">🪞 자기이해</div></div>
+  </div>
+
+  <h3>R — 연구 유형 & S — 규모</h3>
+  <div class="card-grid" style="grid-template-columns:1fr 1fr">
+    <div class="card c-green"><div class="card-label">R — 연구 유형</div><div class="card-desc" style="margin-top:.5rem;line-height:2">메타분석 · 체계적 문헌고찰 · RCT · 종단 · 횡단 · 질적</div></div>
+    <div class="card c-purple"><div class="card-label">S — 규모</div><div class="card-desc" style="margin-top:.5rem;line-height:2">🔬 소규모(&lt;100) · 📊 중규모(100~1K) · 📈 대규모(1K~100K) · 🌍 메가(100K+)</div></div>
+  </div>
+  <div class="callout green"><p><strong>예시:</strong> 수면 부족 Deep Dive → P: 수면&각성, 인지&학습 / A: 학습&교육, 건강&웰빙 / R: 메타분석 / S: 🌍 (130만명)</p></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s5">
+  <div class="section-num">05 — 주요 기능 정의</div>
+  <h2>기능 6개 영역</h2>
+
+  <h3>5.1 아티클 작성 & 관리 (Admin)</h3>
+  <p><span class="bl">Markdown 에디터</span> 또는 <span class="bl">HTML 직접 업로드</span> 두 모드 지원. PARS 태그 다중 선택. SNS 요약문(280자) 별도 작성. 상태: Draft / Published.</p>
+
+  <h3>5.2 탐색 & 발견 (Reader)</h3>
+  <p>홈에 PARS의 <span class="hl">P(현상) 기준 카드 그리드</span> → 상단 탭으로 축 전환 → 카드 클릭시 아티클 목록 → 태그 뱃지 클릭시 관련 아티클 탐색.</p>
+
+  <h3>5.3 아티클 읽기</h3>
+  <p><span class="gr">Markdown</span>: 디자인 테마 렌더링. <span class="hl">Deep Dive (HTML)</span>: 커스텀 HTML 전용 렌더링. 공통: 상단 메타 + PARS 뱃지, 사이드 TOC, 하단 출처 + 관련 추천.</p>
+
+  <h3>5.4 댓글</h3>
+  <p>닉네임 + 비밀번호(선택). 로그인 불필요(MVP). 대댓글 1 depth. Admin 삭제 가능.</p>
+
+  <h3>5.5 SNS 공유 & 유입 루프</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-arrow">①</div><div class="flow-actor admin">작성자</div><div>아티클 작성 + SNS 요약문 작성</div></div>
+    <div class="flow-step"><div class="flow-arrow">↓</div><div class="flow-actor admin">작성자</div><div>SNS에 요약 카드 공유</div></div>
+    <div class="flow-step"><div class="flow-arrow">↓</div><div class="flow-actor reader">독자</div><div>SNS에서 요약 확인 → 흥미 유발</div></div>
+    <div class="flow-step"><div class="flow-arrow">↓</div><div class="flow-actor reader">독자</div><div>링크 클릭 → <strong>PsychPaper 유입</strong></div></div>
+    <div class="flow-step"><div class="flow-arrow">↓</div><div class="flow-actor reader">독자</div><div>Deep Dive 읽기 → 카테고리 탐색 (체류↑)</div></div>
+    <div class="flow-step"><div class="flow-arrow">🔄</div><div class="flow-actor reader">독자</div><div>댓글 + 재공유 → <strong>바이럴 루프</strong></div></div>
+  </div>
+
+  <h3>5.6 OG 메타태그</h3>
+  <p>각 아티클에 동적 <code>og:title</code>, <code>og:description</code>(요약문), <code>og:image</code>, <code>og:url</code>. SNS 미리보기 최적화.</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s6">
+  <div class="section-num">06 — 화면 & 컴포넌트</div>
+  <h2>React 기준</h2>
+  <h3>페이지 구조</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Route</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/</td><td>홈 — PARS 카드 그리드 (탭 전환)</td></tr>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/explore</td><td>전체 아티클 + 검색 + 필터</td></tr>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/category/:slug</td><td>카테고리별 아티클 목록</td></tr>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/article/:slug</td><td>아티클 읽기 (MD or Deep Dive)</td></tr>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/tag/:tag</td><td>태그별 아티클 목록</td></tr>
+      <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--blue)">/admin/*</td><td>관리자 (로그인, 글쓰기, 댓글 관리)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>핵심 컴포넌트</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>영역</th><th>컴포넌트</th><th>역할</th></tr></thead>
+    <tbody>
+      <tr><td>탐색</td><td><code>PARSTabBar</code> <code>CategoryCardGrid</code> <code>ArticleCard</code> <code>PARSBadge</code></td><td>PARS 탭 전환, 카드 그리드, 태그 뱃지</td></tr>
+      <tr><td>읽기</td><td><code>MarkdownRenderer</code> <code>DeepDiveRenderer</code> <code>TableOfContents</code> <code>ShareButtons</code></td><td>본문 렌더링, 사이드 TOC, SNS 공유</td></tr>
+      <tr><td>소셜</td><td><code>CommentForm</code> <code>CommentItem</code> <code>RelatedArticles</code></td><td>댓글, 관련 아티클 추천</td></tr>
+      <tr><td>Admin</td><td><code>ArticleEditor</code> <code>PARSTagSelector</code></td><td>MD/HTML 에디터, PARS 태그 선택</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s7">
+  <div class="section-num">07 — 데이터 구조</div>
+  <h2>DB 스키마 (개념 수준)</h2>
+  <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+    <div class="card c-blue"><div class="card-title">articles</div><div class="card-desc">id, slug, title, subtitle, summary, content_type, content, thumbnail, read_time, view_count, status, created_at, published_at</div></div>
+    <div class="card c-green"><div class="card-title">categories</div><div class="card-desc">id, axis (P/A/R/S), name, slug, icon, description, sort_order</div></div>
+    <div class="card c-purple"><div class="card-title">article_categories</div><div class="card-desc">article_id ↔ category_id (다대다)</div></div>
+    <div class="card c-yellow"><div class="card-title">tags / article_tags</div><div class="card-desc">자유 태그 + 다대다 매핑</div></div>
+    <div class="card c-cyan"><div class="card-title">references</div><div class="card-desc">article_id, authors, year, title, journal, doi</div></div>
+    <div class="card c-red"><div class="card-title">comments</div><div class="card-desc">article_id, parent_id, nickname, password_hash, content</div></div>
+  </div>
+  <p style="font-size:.82rem;color:var(--dim)">※ 실제 테이블 생성, SQL, 인덱스는 이후 단계에서 진행</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s8">
+  <div class="section-num">08 — API 설계</div>
+  <h2>REST API</h2>
+  <h3>Public</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--green)">GET</td><td><code>/api/articles</code></td><td>목록 (페이지네이션, 필터)</td></tr>
+      <tr><td style="color:var(--green)">GET</td><td><code>/api/articles/:slug</code></td><td>상세 (조회수+1)</td></tr>
+      <tr><td style="color:var(--green)">GET</td><td><code>/api/articles/search?q=</code></td><td>검색</td></tr>
+      <tr><td style="color:var(--green)">GET</td><td><code>/api/categories/:axis</code></td><td>PARS 축별 카테고리</td></tr>
+      <tr><td style="color:var(--yellow)">POST</td><td><code>/api/articles/:slug/comments</code></td><td>댓글 작성</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Admin (JWT)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--yellow)">POST</td><td><code>/api/admin/login</code></td><td>로그인</td></tr>
+      <tr><td style="color:var(--yellow)">POST</td><td><code>/api/admin/articles</code></td><td>생성</td></tr>
+      <tr><td style="color:var(--blue)">PUT</td><td><code>/api/admin/articles/:id</code></td><td>수정</td></tr>
+      <tr><td style="color:var(--accent)">DEL</td><td><code>/api/admin/articles/:id</code></td><td>삭제(소프트)</td></tr>
+      <tr><td style="color:var(--accent)">DEL</td><td><code>/api/admin/comments/:id</code></td><td>댓글 삭제</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s9">
+  <div class="section-num">09 — 기술 스택 & 디자인</div>
+  <h2>Tech Stack</h2>
+  <div class="stack-grid">
+    <div class="stack-item"><div class="stack-cat">Frontend</div><div class="stack-name" style="color:var(--blue)">React 18</div></div>
+    <div class="stack-item"><div class="stack-cat">Styling</div><div class="stack-name" style="color:var(--purple)">CSS Modules</div></div>
+    <div class="stack-item"><div class="stack-cat">Markdown</div><div class="stack-name" style="color:var(--green)">react-markdown</div></div>
+    <div class="stack-item"><div class="stack-cat">Backend</div><div class="stack-name" style="color:var(--yellow)">Node + Express</div></div>
+    <div class="stack-item"><div class="stack-cat">Auth</div><div class="stack-name" style="color:var(--accent)">JWT</div></div>
+    <div class="stack-item"><div class="stack-cat">Database</div><div class="stack-name" style="color:var(--cyan)">PostgreSQL</div></div>
+    <div class="stack-item"><div class="stack-cat">ORM</div><div class="stack-name" style="color:var(--blue)">Prisma</div></div>
+    <div class="stack-item"><div class="stack-cat">Env</div><div class="stack-name" style="color:var(--green)">Docker</div></div>
+  </div>
+
+  <h3>디자인 시스템 (Deep Dive 계승)</h3>
+  <div class="swatch-row">
+    <div><div class="swatch" style="background:#0a0a0f;border:1px solid rgba(255,255,255,.1)"></div><div class="swatch-label">bg</div></div>
+    <div><div class="swatch" style="background:#12121a;border:1px solid rgba(255,255,255,.1)"></div><div class="swatch-label">surface</div></div>
+    <div><div class="swatch" style="background:#e8e6e3"></div><div class="swatch-label">text</div></div>
+    <div><div class="swatch" style="background:#ff3d3d"></div><div class="swatch-label">accent</div></div>
+    <div><div class="swatch" style="background:#4a9eff"></div><div class="swatch-label">blue</div></div>
+    <div><div class="swatch" style="background:#22c55e"></div><div class="swatch-label">green</div></div>
+    <div><div class="swatch" style="background:#facc15"></div><div class="swatch-label">yellow</div></div>
+    <div><div class="swatch" style="background:#a78bfa"></div><div class="swatch-label">purple</div></div>
+  </div>
+  <div class="callout"><p><strong>핵심 원칙:</strong> 다크 테마 기본 · 노이즈 텍스처 · 스크롤 애니메이션 · 카드 기반 UI · 그라디언트 악센트 · Noto Sans KR + Space Mono + Playfair Display</p></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s10">
+  <div class="section-num">10 — 개발 로드맵</div>
+  <h2>4 Phase MVP (총 6~9주)</h2>
+  <div class="phase-grid">
+    <div class="phase"><div class="phase-num">1</div><div class="phase-title">코어</div><div class="phase-dur">2~3주</div><div class="phase-items">Docker 환경<br>DB 스키마<br>Admin 로그인<br>아티클 CRUD<br>PARS 시드 데이터</div></div>
+    <div class="phase"><div class="phase-num">2</div><div class="phase-title">독자 경험</div><div class="phase-dur">2~3주</div><div class="phase-items">홈 PARS 카드<br>카테고리별 목록<br>아티클 읽기<br>태그 네비게이션<br>검색</div></div>
+    <div class="phase"><div class="phase-num">3</div><div class="phase-title">소셜</div><div class="phase-dur">1~2주</div><div class="phase-items">댓글 시스템<br>SNS 공유 버튼<br>OG 메타태그<br>관련 아티클 추천</div></div>
+    <div class="phase"><div class="phase-num">4</div><div class="phase-title">배포</div><div class="phase-dur">1주</div><div class="phase-items">프로덕션 빌드<br>Vercel + Railway<br>SEO<br>성능 최적화</div></div>
+  </div>
+
+  <h3>MVP 제외 범위</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>제외</th><th>사유</th><th>향후</th></tr></thead>
+    <tbody>
+      <tr><td>독자 회원가입/로그인</td><td>복잡도 축소</td><td>v2</td></tr>
+      <tr><td>좋아요/북마크</td><td>범위 제한</td><td>v2</td></tr>
+      <tr><td>옵시디언 그래프 뷰</td><td>개발 복잡도</td><td>v3 (D3.js)</td></tr>
+      <tr><td>AI 요약 자동생성</td><td>API 연동</td><td>v2 (Anthropic)</td></tr>
+      <tr><td>OG 이미지 자동생성</td><td>SSR 필요</td><td>v2 (Satori)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="s11">
+  <div class="section-num">11 — 완료 기준 & KPI</div>
+  <h2>MVP 완료 체크리스트</h2>
+  <div class="checklist">
+    <div class="check-item"><div class="check-box"></div><div>Markdown 또는 HTML로 아티클 작성·발행 가능</div></div>
+    <div class="check-item"><div class="check-box"></div><div>아티클에 PARS 카테고리 태그 부여 가능</div></div>
+    <div class="check-item"><div class="check-box"></div><div>홈에서 PARS 카드 그리드로 카테고리 탐색</div></div>
+    <div class="check-item"><div class="check-box"></div><div>카테고리 카드 클릭 → 아티클 목록 표시</div></div>
+    <div class="check-item"><div class="check-box"></div><div>Markdown & Deep Dive HTML 정상 렌더링</div></div>
+    <div class="check-item"><div class="check-box"></div><div>태그 뱃지 클릭 → 같은 태그 아티클 이동</div></div>
+    <div class="check-item"><div class="check-box"></div><div>닉네임으로 댓글 작성 가능</div></div>
+    <div class="check-item"><div class="check-box"></div><div>SNS 공유 + OG 메타태그 정상 동작</div></div>
+    <div class="check-item"><div class="check-box"></div><div>새로고침 후 모든 데이터 유지</div></div>
+    <div class="check-item"><div class="check-box"></div><div>모바일 반응형 아티클 읽기 가능</div></div>
+  </div>
+
+  <h3>성공 지표 (런칭 후 3개월)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>지표</th><th>목표</th><th>측정</th></tr></thead>
+    <tbody>
+      <tr><td>발행 아티클</td><td style="color:var(--blue);font-weight:700">10개+</td><td>DB</td></tr>
+      <tr><td>월간 UV</td><td style="color:var(--blue);font-weight:700">1,000+</td><td>애널리틱스</td></tr>
+      <tr><td>읽기 완료율</td><td style="color:var(--blue);font-weight:700">40%+</td><td>스크롤 깊이</td></tr>
+      <tr><td>아티클당 공유</td><td style="color:var(--blue);font-weight:700">5회+</td><td>클릭 추적</td></tr>
+      <tr><td>아티클당 댓글</td><td style="color:var(--blue);font-weight:700">3개+</td><td>DB</td></tr>
+      <tr><td>SNS→웹 유입</td><td style="color:var(--blue);font-weight:700">30%+</td><td>UTM</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-num">부록 — 기존 제작 아티클</div>
+  <h2>첫 번째 콘텐츠 (플랫폼 론칭 시 등록)</h2>
+  <div class="card-grid" style="grid-template-columns:1fr 1fr">
+    <div class="card c-red"><div class="card-label">Article #1 · Deep Dive</div><div class="card-title">3시간 자고 수업 들으면 뇌에서 무슨 일이?</div><div class="card-desc">P: 수면&각성, 인지&학습 · R: 메타분석 · S: 🌍</div></div>
+    <div class="card c-purple"><div class="card-label">Article #2 · Deep Dive</div><div class="card-title">잠이 부족해도, 너무 많이 자도 죽는다 — 130만 명</div><div class="card-desc">P: 수면&각성 · A: 건강&웰빙 · R: 메타분석 · S: 🌍</div></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+document.querySelectorAll('.toc-item').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>

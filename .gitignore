@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build / output
+dist/
+build/
+.next/
+out/
+
+# Logs & debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Uploads (MVP 로컬 저장 시)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Docker (선택: 로컬 override만 제외할 때)
+# docker-compose.override.yml
