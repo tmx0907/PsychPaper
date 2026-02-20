@@ -1,5 +1,13 @@
-# 백엔드(server) + DB만 컨테이너. 웹은 로컬에서 npm run dev
+# web + server + DB. 브라우저에서 http://localhost:8080 으로 PsychPaper 접속
 services:
+  web:
+    build: ./web
+    ports:
+      - "8080:80"
+    depends_on:
+      - server
+    restart: unless-stopped
+
   server:
     build: ./server
     ports:

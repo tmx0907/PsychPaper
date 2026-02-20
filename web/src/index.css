@@ -14,9 +14,87 @@
   --green: #22c55e;
   --yellow: #facc15;
   --purple: #a78bfa;
+  --cyan: #22d3ee;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* design-reference.html 계승: 노이즈 텍스처 */
+.noise {
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hero 그라디언트 블롭 */
+.hero-blob {
+  position: absolute;
+  top: -20%;
+  right: -15%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(74, 158, 255, 0.08) 0%, rgba(167, 139, 250, 0.04) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: hero-pulse 8s ease-in-out infinite;
+}
+@keyframes hero-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* 아티클 카드 (toc-item 스타일) */
+.toc-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  text-align: left;
+}
+.toc-item:hover {
+  border-color: rgba(74, 158, 255, 0.25);
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+.toc-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--blue);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.3rem;
+}
+.toc-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.toc-desc {
+  font-size: 0.8rem;
+  color: var(--dim);
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
+/* 본문 섹션 라벨 (design-reference .section-num) */
+.section-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 0.75rem;
 }
