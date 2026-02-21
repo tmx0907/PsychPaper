@@ -1,8 +1,7 @@
 -- ============================================================
 -- 04_articles.sql — 아티클 본체 (핵심 테이블)
--- 의존: 00_init.sql (content_type, article_status ENUM)
--- 관계: 1:N → comments, references
---       N:M → categories (via 05), tags (via 06)
+-- 의존: 00_init.sql (content_type, article_status ENUM), 02_categories.sql (optional)
+-- 관계: category_id → categories (1:N, optional), 1:N → comments
 -- ============================================================
 
 CREATE TABLE articles (
@@ -18,6 +17,7 @@ CREATE TABLE articles (
     view_count      INTEGER         NOT NULL DEFAULT 0,      -- 조회수
     status          article_status  NOT NULL DEFAULT 'draft',
     is_deleted      BOOLEAN         NOT NULL DEFAULT FALSE,  -- 소프트 삭제
+    category_id     INTEGER         DEFAULT NULL REFERENCES categories(id) ON DELETE SET NULL,  -- 1:N, optional
     created_at      TIMESTAMP       NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP       NOT NULL DEFAULT NOW(),
     published_at    TIMESTAMP       DEFAULT NULL             -- 발행 전에는 NULL

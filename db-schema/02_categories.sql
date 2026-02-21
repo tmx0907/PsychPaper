@@ -1,7 +1,7 @@
 -- ============================================================
--- 02_categories.sql — PARS 카테고리 마스터
+-- 02_categories.sql — 카테고리 마스터 (선택)
 -- 의존: 00_init.sql (pars_axis ENUM)
--- 관계: article_categories를 통해 articles와 N:M
+-- 관계: articles.category_id → categories (1:N, optional)
 -- ============================================================
 
 CREATE TABLE categories (
